@@ -13,6 +13,10 @@ New columns:
 Install:  uv venv .venv && uv pip install --python .venv/bin/python anthropic pandas
 Key:      put ANTHROPIC_API_KEY=sk-ant-... into the .env file (it is in .gitignore)
 
+Second pass (expected market effect, -1..1): add --task impact before the command, e.g.
+  python annotate_news.py --task impact submit
+  crypto_impact / gold_impact / economy_impact  bearish(-1) ... bullish(+1) for crypto, gold, global economy
+
 Commands:
   python annotate_news.py sample --n 20     # quick synchronous test, prints results
   python annotate_news.py submit            # sends everything via Batch API (50% cheaper)
@@ -102,6 +106,57 @@ SCHEMA = {
 
 NEW_COLS = ["globality", "clickbait", "actors", "subjects", "sentiment", "sentiment_score"]
 
+# Second pass ("impact" task): expected market effect, unlike sentiment (general good/bad of the event).
+IMPACT_SYSTEM = """You annotate news headlines for a dataset used to study how news moves Bitcoin, Ethereum and gold prices.
+
+For every headline estimate the expected direction and strength of its effect on three things over the following days, as a market analyst would judge it at the moment of publication. Numbers are -1..1:
+  -1 = strongly bearish / harmful, 0 = no meaningful effect, +1 = strongly bullish / beneficial.
+Strength must reflect both direction and how much the event matters for that market: most headlines (local news, how-to articles, product reviews, single small companies) should be 0 or close to 0.
+
+- id: the id given in the input.
+- crypto_impact: effect on cryptocurrency prices (Bitcoin, Ethereum, the crypto market as a whole).
+  Examples: spot Bitcoin ETF approved +0.8; major exchange hacked or collapses -0.8; country bans crypto -0.6; Fed cuts rates / more liquidity +0.4; Fed hikes rates -0.4; a small altcoin partnership +0.1.
+- gold_impact: effect on the gold price. Gold is a safe haven: war, sanctions, financial crises, high inflation, rate cuts and a weak dollar are positive for gold; rate hikes, a strong dollar and calm risk-on markets are negative.
+- economy_impact: effect on the global economy and stock markets (growth, corporate earnings, risk appetite).
+
+Judge the market effect, not whether the event is morally good or bad: a war is negative for the economy but positive for gold. Return exactly one item per input id, in the same order."""
+
+IMPACT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "crypto_impact": {"type": "number"},
+                    "gold_impact": {"type": "number"},
+                    "economy_impact": {"type": "number"},
+                },
+                "required": ["id", "crypto_impact", "gold_impact", "economy_impact"],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["items"],
+    "additionalProperties": False,
+}
+IMPACT_COLS = ["crypto_impact", "gold_impact", "economy_impact"]
+
+TASKS = {
+    "base": (SYSTEM, SCHEMA, RESULTS, STATE),
+    "impact": (IMPACT_SYSTEM, IMPACT_SCHEMA,
+               os.path.join(WORK_DIR, "results_impact.jsonl"),
+               os.path.join(WORK_DIR, "batches_impact.json")),
+}
+
+
+def use_task(name):
+    """Switches prompt, schema and work files to the chosen annotation pass."""
+    global SYSTEM, SCHEMA, RESULTS, STATE
+    SYSTEM, SCHEMA, RESULTS, STATE = TASKS[name]
+
 # ----------------------------- DATA ----------------------------------------
 
 
@@ -159,10 +214,11 @@ def parse_message(msg, chunk):
     return got
 
 
-def load_done():
+def load_done(path=None):
+    path = path or RESULTS
     done = {}
-    if os.path.exists(RESULTS):
-        with open(RESULTS, encoding="utf-8") as f:
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
             for line in f:
                 rec = json.loads(line)
                 done[rec["chunk"]] = rec["items"]
@@ -209,8 +265,7 @@ def cmd_sample(client, args):
         a = got.get(rid)
         print(f"\n{text}")
         if a:
-            print(f"  glob={a['globality']:.2f} click={a['clickbait']:.2f} "
-                  f"{a['sentiment']}({a['sentiment_score']:+.2f}) subj={a['subjects']} actors={a['actors']}")
+            print("  " + "  ".join(f"{k}={v}" for k, v in a.items() if k != "id"))
         else:
             print("  (missing)")
 
@@ -281,7 +336,7 @@ def cmd_collect(client, args):
         b["collected"] = True
         save_state(state)
         print(f"{b['id']}: saved {ok} chunks, failed {bad}")
-    write_outputs(data, done)
+    write_outputs(data)
     missing = [cid for cid in all_chunks if cid not in done]
     if missing:
         print(f"{len(missing)} chunks still missing -> run submit again, then collect")
@@ -294,19 +349,24 @@ def clamp(x, lo, hi):
         return ""
 
 
-def write_outputs(data, done):
-    ann = {}
-    for items in done.values():
-        for k, v in items.items():
-            ann[int(k)] = v
+def write_outputs(data):
+    """Rewrites *_annotated.csv from everything collected so far (both passes)."""
+    ann, imp = {}, {}
+    for target, task in ((ann, "base"), (imp, "impact")):
+        for items in load_done(TASKS[task][2]).values():
+            for k, v in items.items():
+                target[int(k)] = v
     for path, (header, rows) in data.items():
         out = path.replace(".csv", "_annotated.csv")
         filled = 0
         with open(out, "w", encoding="utf-8-sig", newline="") as f:
             w = csv.writer(f, delimiter=";")
-            w.writerow(header + NEW_COLS)
+            w.writerow(header + NEW_COLS + (IMPACT_COLS if imp else []))
             for r in rows:
                 a = ann.get(int(r[0]))
+                i = imp.get(int(r[0]))
+                extra = ([clamp(i[c], -1, 1) for c in IMPACT_COLS] if i else [""] * len(IMPACT_COLS)) \
+                    if imp else []
                 if a:
                     filled += 1
                     w.writerow(r + [
@@ -316,10 +376,11 @@ def write_outputs(data, done):
                         "|".join(a["subjects"]),
                         a["sentiment"],
                         clamp(a["sentiment_score"], -1, 1),
-                    ])
+                    ] + extra)
                 else:
-                    w.writerow(r + [""] * len(NEW_COLS))
-        print(f"{out}: {filled}/{len(rows)} rows annotated")
+                    w.writerow(r + [""] * len(NEW_COLS) + extra)
+        note = f", impact columns for {sum(1 for r in rows if int(r[0]) in imp)}" if imp else ""
+        print(f"{out}: {filled}/{len(rows)} rows annotated{note}")
 
 
 def load_env(path=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")):
@@ -338,6 +399,9 @@ def load_env(path=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--task", choices=TASKS, default="base",
+                    help="base = globality/clickbait/actors/subjects/sentiment; "
+                         "impact = crypto_impact/gold_impact/economy_impact")
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("sample")
     s.add_argument("--n", type=int, default=20)
@@ -348,6 +412,7 @@ def main():
     sub.add_parser("collect")
     args = ap.parse_args()
 
+    use_task(args.task)
     load_env()
     if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
         sys.exit("No API key: put ANTHROPIC_API_KEY=sk-ant-... into the .env file next to this script.")

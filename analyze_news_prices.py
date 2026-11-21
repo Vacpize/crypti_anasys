@@ -16,6 +16,7 @@ import pandas as pd
 
 ASSETS = {"btc": "btc_usd", "eth": "eth_usd", "gold": "gold_usd_oz"}
 HORIZONS = {"1h": "1h", "4h": "4h", "24h": "24h"}
+IMPACT_COLS = ["crypto_impact", "gold_impact", "economy_impact"]
 
 
 def load_news(paths):
@@ -78,6 +79,9 @@ def daily_table(news, prices):
         "share_global>=0.6": g["hi"].mean(),
         "clickbait": g["clickbait"].mean(),
     })
+    for c in IMPACT_COLS:
+        if c in n:   # sum, not mean: a day with many strong signals should weigh more
+            d[f"{c}_sum"] = g[c].sum()
     px = prices.set_index("time").resample("1D").first()
     for a, col in ASSETS.items():
         r = (px[col].shift(-1) / px[col] - 1) * 100
@@ -88,8 +92,8 @@ def daily_table(news, prices):
         m = x.notna() & y.notna()
         return round(x[m].rank().corr(y[m].rank()), 3)
 
-    feats = [c for c in d.columns if c != "n" and not c.startswith(tuple(ASSETS))]
-    targets = [c for c in d.columns if c.startswith(tuple(ASSETS))]
+    targets = [f"{a}_{t}" for a in ASSETS for t in ("prev", "same", "next", "|same|")]
+    feats = [c for c in d.columns if c != "n" and c not in targets]
     out = pd.DataFrame({t: {f: rank_corr(d[f], d[t]) for f in feats} for t in targets})
     return out, len(d)
 
@@ -141,6 +145,12 @@ def main():
         for scope, part in [("all", a), ("globality>=0.6", a[a["globality"] >= 0.6])]:
             c = {x: round(part["sentiment_score"].corr(part[f"ret_{x}_{h}"]), 4) for x in ASSETS}
             print(f"  {scope} (n={len(part):,}): {c}")
+        for c in IMPACT_COLS:
+            if c in a:
+                a[f"{c}_bin"] = pd.cut(a[c], [-1.01, -0.3, -0.1, -0.001, 0.001, 0.1, 0.3, 1.0],
+                                       labels=["<=-0.3", "-0.3..-0.1", "-0.1..0", "0", "0..0.1", "0.1..0.3", ">0.3"])
+                print(f"\n== by {c} ==")
+                print(table(a, f"{c}_bin", h, min_n=30).sort_index())
         actors = a["actors"].fillna("").str.split("|").explode()
         print("\n== top 25 actors ==")
         print(actors[actors != ""].value_counts().head(25))
