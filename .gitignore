@@ -2,3 +2,9 @@ __pycache__/
 annotation_work/
 .env
 finetune_data/
+experiments/data/
+experiments/logs/
+experiments/**/checkpoint/
+experiments/**/*_smoke*/
+experiments/**/*_pilot/
+experiments/**/*_try/

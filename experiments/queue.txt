@@ -1,0 +1,31 @@
+# Queue for experiments/run_all.sh, in priority order (the main result first: variant A, honest target "next").
+# <model id> <variant> <target> [extra ft_train.py args]   |   run <done file> <command ...>
+google/gemma-4-E4B A next --max-steps 30 --eval-every 30 --tag smoke
+Qwen/Qwen3.5-9B-Base A next --max-steps 30 --eval-every 30 --tag smoke
+answerdotai/ModernBERT-large A next --method full --lr 3e-5 --max-steps 30 --eval-every 30 --tag smoke
+answerdotai/ModernBERT-large A next --method full --lr 3e-5
+ProsusAI/finbert A next --method full --lr 3e-5
+Qwen/Qwen3.5-4B-Base A next
+run experiments/2026-11-23_news-direction/qwen3.8-27b-nvfp4/zeroshot_try/metrics.json bash experiments/spark_run.sh ft_zeroshot.py --limit 200 --tag try
+google/gemma-4-E4B A next
+Qwen/Qwen3.5-9B-Base A next
+google/gemma-4-12B A next
+run experiments/2026-11-23_news-direction/qwen3.8-27b-nvfp4/zeroshot/metrics.json bash experiments/spark_run.sh ft_zeroshot.py
+answerdotai/ModernBERT-large A same --method full --lr 3e-5
+ProsusAI/finbert A same --method full --lr 3e-5
+Qwen/Qwen3.5-4B-Base A same
+google/gemma-4-E4B A same
+Qwen/Qwen3.5-9B-Base A same
+google/gemma-4-12B A same
+answerdotai/ModernBERT-large B next --method full --lr 3e-5 --max-len 256
+ProsusAI/finbert B next --method full --lr 3e-5 --max-len 256
+Qwen/Qwen3.5-4B-Base B next --max-len 256
+google/gemma-4-E4B B next --max-len 256
+Qwen/Qwen3.5-9B-Base B next --max-len 256
+google/gemma-4-12B B next --max-len 256
+answerdotai/ModernBERT-large B same --method full --lr 3e-5 --max-len 256
+ProsusAI/finbert B same --method full --lr 3e-5 --max-len 256
+Qwen/Qwen3.5-4B-Base B same --max-len 256
+google/gemma-4-E4B B same --max-len 256
+Qwen/Qwen3.5-9B-Base B same --max-len 256
+google/gemma-4-12B B same --max-len 256
