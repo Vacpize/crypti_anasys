@@ -5,8 +5,9 @@ Joins annotated news with BTC / ETH / gold prices and shows how prices moved aft
 For every headline: price at publication time and 1h / 4h / 24h later -> return in %.
 Then average return and average absolute move grouped by sentiment, subject, globality, clickbait.
 
-Run:  python analyze_news_prices.py                 # uses *_annotated.csv
-      python analyze_news_prices.py --save joined.csv   # also saves the per-headline table
+Install: python3 -m pip install --user --break-system-packages pandas
+Run:  python3 analyze_news_prices.py                # uses *_annotated.csv
+      python3 analyze_news_prices.py --save joined.csv   # also saves the per-headline table
 """
 
 import argparse

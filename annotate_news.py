@@ -10,19 +10,19 @@ New columns:
   sentiment        positive / negative / neutral
   sentiment_score  -1..1  (negative ... positive)
 
-Install:  uv venv .venv && uv pip install --python .venv/bin/python anthropic pandas
+Install:  python3 -m pip install --user --break-system-packages anthropic pandas
 Key:      put ANTHROPIC_API_KEY=sk-ant-... into the .env file (it is in .gitignore)
 
 Second pass (expected market effect, -1..1): add --task impact before the command, e.g.
-  python annotate_news.py --task impact submit
+  python3 annotate_news.py --task impact submit
   crypto_impact / gold_impact / economy_impact  bearish(-1) ... bullish(+1) for crypto, gold, global economy
 
 Commands:
-  python annotate_news.py sample --n 20     # quick synchronous test, prints results
-  python annotate_news.py submit            # sends everything via Batch API (50% cheaper)
-  python annotate_news.py status            # shows batch progress
-  python annotate_news.py collect           # downloads results, writes *_annotated.csv
-  python annotate_news.py submit            # run again after collect: re-sends only failed chunks
+  python3 annotate_news.py sample --n 20     # quick synchronous test, prints results
+  python3 annotate_news.py submit            # sends everything via Batch API (50% cheaper)
+  python3 annotate_news.py status            # shows batch progress
+  python3 annotate_news.py collect           # downloads results, writes *_annotated.csv
+  python3 annotate_news.py submit            # run again after collect: re-sends only failed chunks
 
 Resumable: results are cached in annotation_work/results.jsonl, finished chunks are never re-sent.
 """
