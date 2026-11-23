@@ -1,0 +1,10 @@
+{
+  "baseline": "majority",
+  "fitted_for_target": "next",
+  "thresholds_pct": {
+    "btc": 1.0,
+    "eth": 1.0,
+    "gold": 0.3
+  },
+  "choice_on_val": {}
+}

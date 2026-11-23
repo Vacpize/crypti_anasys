@@ -1,0 +1,42 @@
+{
+  "majority_same": {
+    "btc": "42/92 p=0.826 centered 48/92 rho=-0.2278",
+    "eth": "43/92 p=0.767 centered 47/92 rho=-0.0191",
+    "gold": "38/92 p=0.962 centered 51/92 rho=0.1592"
+  },
+  "majority_next": {
+    "btc": "41/91 p=0.853 centered 41/91 rho=-0.0476",
+    "eth": "42/91 p=0.799 centered 50/91 rho=-0.0321",
+    "gold": "38/91 p=0.954 centered 40/91 rho=-0.1208"
+  },
+  "inertia_same": {
+    "btc": "42/92 p=0.826 centered 42/92 rho=-0.0527",
+    "eth": "40/92 p=0.912 centered 41/92 rho=-0.042",
+    "gold": "42/92 p=0.826 centered 45/92 rho=-0.0511"
+  },
+  "inertia_next": {
+    "btc": "41/91 p=0.853 centered 41/91 rho=-0.107",
+    "eth": "40/91 p=0.896 centered 40/91 rho=-0.0809",
+    "gold": "41/91 p=0.853 centered 43/91 rho=-0.0266"
+  },
+  "tfidf_lr_same": {
+    "btc": "43/92 p=0.767 centered 58/92 rho=0.2517",
+    "eth": "43/92 p=0.767 centered 54/92 rho=0.1609",
+    "gold": "39/92 p=0.941 centered 41/92 rho=-0.0754"
+  },
+  "tfidf_lr_next": {
+    "btc": "41/91 p=0.853 centered 49/91 rho=-0.0505",
+    "eth": "40/91 p=0.896 centered 52/91 rho=-0.1045",
+    "gold": "37/91 p=0.971 centered 38/91 rho=-0.2882"
+  },
+  "annot_lr_same": {
+    "btc": "41/92 p=0.874 centered 52/92 rho=0.1045",
+    "eth": "41/92 p=0.874 centered 48/92 rho=0.0183",
+    "gold": "38/92 p=0.962 centered 41/92 rho=0.0274"
+  },
+  "annot_lr_next": {
+    "btc": "41/91 p=0.853 centered 54/91 rho=0.2186",
+    "eth": "42/91 p=0.799 centered 53/91 rho=0.1148",
+    "gold": "37/91 p=0.971 centered 37/91 rho=-0.1136"
+  }
+}

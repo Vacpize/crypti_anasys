@@ -1,0 +1,882 @@
+{
+  "val": {
+    "same": {
+      "news_level": {
+        "btc": {
+          "n": 780,
+          "accuracy": 0.4808,
+          "macro_f1": 0.3374,
+          "log_loss": 1.0518,
+          "fact_share": [
+            0.215,
+            0.563,
+            0.222
+          ],
+          "pred_share": [
+            0.094,
+            0.708,
+            0.199
+          ],
+          "confusion": [
+            [
+              16,
+              112,
+              40
+            ],
+            [
+              41,
+              321,
+              77
+            ],
+            [
+              16,
+              119,
+              38
+            ]
+          ]
+        },
+        "eth": {
+          "n": 780,
+          "accuracy": 0.3077,
+          "macro_f1": 0.2953,
+          "log_loss": 1.1346,
+          "fact_share": [
+            0.235,
+            0.606,
+            0.159
+          ],
+          "pred_share": [
+            0.253,
+            0.251,
+            0.496
+          ],
+          "confusion": [
+            [
+              48,
+              37,
+              98
+            ],
+            [
+              120,
+              128,
+              225
+            ],
+            [
+              29,
+              31,
+              64
+            ]
+          ]
+        },
+        "gold": {
+          "n": 780,
+          "accuracy": 0.3295,
+          "macro_f1": 0.2197,
+          "log_loss": 1.1092,
+          "fact_share": [
+            0.203,
+            0.322,
+            0.476
+          ],
+          "pred_share": [
+            0.032,
+            0.885,
+            0.083
+          ],
+          "confusion": [
+            [
+              5,
+              140,
+              13
+            ],
+            [
+              3,
+              224,
+              24
+            ],
+            [
+              17,
+              326,
+              28
+            ]
+          ]
+        }
+      },
+      "day_level": {
+        "btc": {
+          "days": 31,
+          "correct_dir": 13,
+          "accuracy_dir": 0.4194,
+          "p_value_binomial": 0.8595,
+          "correct_dir_centered": 13,
+          "accuracy_dir_centered": 0.4194,
+          "p_value_centered": 0.8595,
+          "threshold_centered": 0.03165,
+          "accuracy_3class": 0.5484,
+          "pearson_signal_vs_return": -0.0622,
+          "spearman_signal_vs_return": -0.1185,
+          "mae_pred_return_pct": 1.0289,
+          "share_pred_up": 0.871,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.484,
+          "strategy_return_pct": -4.68,
+          "strategy_centered_return_pct": -4.63,
+          "hold_return_pct": 0.38,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 7,
+              "accuracy_dir": 0.4118,
+              "correct_dir_centered": 7,
+              "spearman_signal_vs_return": -0.1961
+            }
+          }
+        },
+        "eth": {
+          "days": 31,
+          "correct_dir": 17,
+          "accuracy_dir": 0.5484,
+          "p_value_binomial": 0.3601,
+          "correct_dir_centered": 13,
+          "accuracy_dir_centered": 0.4194,
+          "p_value_centered": 0.8595,
+          "threshold_centered": 0.04104,
+          "accuracy_3class": 0.2581,
+          "pearson_signal_vs_return": 0.0018,
+          "spearman_signal_vs_return": 0.0685,
+          "mae_pred_return_pct": 1.2744,
+          "share_pred_up": 0.806,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.548,
+          "strategy_return_pct": 6.73,
+          "strategy_centered_return_pct": -11.33,
+          "hold_return_pct": 2.92,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 10,
+              "accuracy_dir": 0.5882,
+              "correct_dir_centered": 7,
+              "spearman_signal_vs_return": -0.0466
+            }
+          }
+        },
+        "gold": {
+          "days": 31,
+          "correct_dir": 19,
+          "accuracy_dir": 0.6129,
+          "p_value_binomial": 0.1405,
+          "correct_dir_centered": 13,
+          "accuracy_dir_centered": 0.4194,
+          "p_value_centered": 0.8595,
+          "threshold_centered": 0.02239,
+          "accuracy_3class": 0.4194,
+          "pearson_signal_vs_return": -0.1995,
+          "spearman_signal_vs_return": -0.2476,
+          "mae_pred_return_pct": 0.6505,
+          "share_pred_up": 0.935,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.613,
+          "strategy_return_pct": 4.67,
+          "strategy_centered_return_pct": -8.47,
+          "hold_return_pct": 9.62,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 12,
+              "accuracy_dir": 0.7059,
+              "correct_dir_centered": 6,
+              "spearman_signal_vs_return": -0.4069
+            }
+          }
+        }
+      }
+    },
+    "next": {
+      "news_level": {
+        "btc": {
+          "n": 742,
+          "accuracy": 0.5323,
+          "macro_f1": 0.3394,
+          "log_loss": 1.0201,
+          "fact_share": [
+            0.187,
+            0.679,
+            0.133
+          ],
+          "pred_share": [
+            0.09,
+            0.706,
+            0.204
+          ],
+          "confusion": [
+            [
+              15,
+              95,
+              29
+            ],
+            [
+              46,
+              358,
+              100
+            ],
+            [
+              6,
+              71,
+              22
+            ]
+          ]
+        },
+        "eth": {
+          "n": 742,
+          "accuracy": 0.2871,
+          "macro_f1": 0.2703,
+          "log_loss": 1.1462,
+          "fact_share": [
+            0.183,
+            0.664,
+            0.152
+          ],
+          "pred_share": [
+            0.241,
+            0.255,
+            0.504
+          ],
+          "confusion": [
+            [
+              37,
+              32,
+              67
+            ],
+            [
+              112,
+              125,
+              256
+            ],
+            [
+              30,
+              32,
+              51
+            ]
+          ]
+        },
+        "gold": {
+          "n": 742,
+          "accuracy": 0.3504,
+          "macro_f1": 0.2266,
+          "log_loss": 1.1023,
+          "fact_share": [
+            0.23,
+            0.346,
+            0.423
+          ],
+          "pred_share": [
+            0.031,
+            0.885,
+            0.084
+          ],
+          "confusion": [
+            [
+              4,
+              150,
+              17
+            ],
+            [
+              6,
+              231,
+              20
+            ],
+            [
+              13,
+              276,
+              25
+            ]
+          ]
+        }
+      },
+      "day_level": {
+        "btc": {
+          "days": 31,
+          "correct_dir": 13,
+          "accuracy_dir": 0.4194,
+          "p_value_binomial": 0.8595,
+          "correct_dir_centered": 13,
+          "accuracy_dir_centered": 0.4194,
+          "p_value_centered": 0.8595,
+          "threshold_centered": 0.03165,
+          "accuracy_3class": 0.6452,
+          "pearson_signal_vs_return": 0.0909,
+          "spearman_signal_vs_return": 0.0238,
+          "mae_pred_return_pct": 0.9988,
+          "share_pred_up": 0.871,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.484,
+          "strategy_return_pct": -1.92,
+          "strategy_centered_return_pct": 3.36,
+          "hold_return_pct": -0.6,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 7,
+              "accuracy_dir": 0.4118,
+              "correct_dir_centered": 5,
+              "spearman_signal_vs_return": -0.3995
+            }
+          }
+        },
+        "eth": {
+          "days": 31,
+          "correct_dir": 15,
+          "accuracy_dir": 0.4839,
+          "p_value_binomial": 0.6399,
+          "correct_dir_centered": 17,
+          "accuracy_dir_centered": 0.5484,
+          "p_value_centered": 0.3601,
+          "threshold_centered": 0.04104,
+          "accuracy_3class": 0.1935,
+          "pearson_signal_vs_return": 0.0738,
+          "spearman_signal_vs_return": -0.052,
+          "mae_pred_return_pct": 1.2648,
+          "share_pred_up": 0.806,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.548,
+          "strategy_return_pct": -4.9,
+          "strategy_centered_return_pct": 4.95,
+          "hold_return_pct": 2.57,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 10,
+              "accuracy_dir": 0.5882,
+              "correct_dir_centered": 9,
+              "spearman_signal_vs_return": -0.3652
+            }
+          }
+        },
+        "gold": {
+          "days": 31,
+          "correct_dir": 17,
+          "accuracy_dir": 0.5484,
+          "p_value_binomial": 0.3601,
+          "correct_dir_centered": 15,
+          "accuracy_dir_centered": 0.4839,
+          "p_value_centered": 0.6399,
+          "threshold_centered": 0.02239,
+          "accuracy_3class": 0.3871,
+          "pearson_signal_vs_return": 0.1074,
+          "spearman_signal_vs_return": 0.1403,
+          "mae_pred_return_pct": 0.6789,
+          "share_pred_up": 0.935,
+          "share_pred_up_centered": 0.484,
+          "share_fact_up": 0.613,
+          "strategy_return_pct": 7.0,
+          "strategy_centered_return_pct": 1.13,
+          "hold_return_pct": 8.57,
+          "by_month": {
+            "2026-08..09": {
+              "days": 17,
+              "news": 427,
+              "correct_dir": 9,
+              "accuracy_dir": 0.5294,
+              "correct_dir_centered": 9,
+              "spearman_signal_vs_return": 0.1054
+            }
+          }
+        }
+      }
+    }
+  },
+  "test": {
+    "same": {
+      "news_level": {
+        "btc": {
+          "n": 22975,
+          "accuracy": 0.3429,
+          "macro_f1": 0.2885,
+          "log_loss": 1.1256,
+          "fact_share": [
+            0.453,
+            0.366,
+            0.182
+          ],
+          "pred_share": [
+            0.112,
+            0.685,
+            0.203
+          ],
+          "confusion": [
+            [
+              1212,
+              7099,
+              2089
+            ],
+            [
+              917,
+              5786,
+              1696
+            ],
+            [
+              442,
+              2853,
+              881
+            ]
+          ]
+        },
+        "eth": {
+          "n": 22975,
+          "accuracy": 0.3099,
+          "macro_f1": 0.304,
+          "log_loss": 1.1291,
+          "fact_share": [
+            0.47,
+            0.341,
+            0.188
+          ],
+          "pred_share": [
+            0.3,
+            0.218,
+            0.481
+          ],
+          "confusion": [
+            [
+              3324,
+              2314,
+              5166
+            ],
+            [
+              2351,
+              1696,
+              3796
+            ],
+            [
+              1224,
+              1005,
+              2099
+            ]
+          ]
+        },
+        "gold": {
+          "n": 22975,
+          "accuracy": 0.3002,
+          "macro_f1": 0.1936,
+          "log_loss": 1.1387,
+          "fact_share": [
+            0.446,
+            0.299,
+            0.254
+          ],
+          "pred_share": [
+            0.028,
+            0.924,
+            0.048
+          ],
+          "confusion": [
+            [
+              286,
+              9478,
+              490
+            ],
+            [
+              191,
+              6344,
+              345
+            ],
+            [
+              159,
+              5415,
+              267
+            ]
+          ]
+        }
+      },
+      "day_level": {
+        "btc": {
+          "days": 92,
+          "correct_dir": 44,
+          "accuracy_dir": 0.4783,
+          "p_value_binomial": 0.6988,
+          "correct_dir_centered": 55,
+          "accuracy_dir_centered": 0.5978,
+          "p_value_centered": 0.0379,
+          "threshold_centered": 0.03165,
+          "accuracy_3class": 0.4565,
+          "pearson_signal_vs_return": 0.1424,
+          "spearman_signal_vs_return": 0.2125,
+          "mae_pred_return_pct": 1.5218,
+          "share_pred_up": 0.978,
+          "share_pred_up_centered": 0.359,
+          "share_fact_up": 0.457,
+          "strategy_return_pct": 0.78,
+          "strategy_centered_return_pct": 61.93,
+          "hold_return_pct": 0.69,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 25,
+              "accuracy_dir": 0.5682,
+              "correct_dir_centered": 23,
+              "spearman_signal_vs_return": 0.17
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 12,
+              "accuracy_dir": 0.3871,
+              "correct_dir_centered": 22,
+              "spearman_signal_vs_return": 0.3081
+            },
+            "2026-11": {
+              "days": 17,
+              "news": 17037,
+              "correct_dir": 7,
+              "accuracy_dir": 0.4118,
+              "correct_dir_centered": 10,
+              "spearman_signal_vs_return": 0.0074
+            }
+          }
+        },
+        "eth": {
+          "days": 92,
+          "correct_dir": 43,
+          "accuracy_dir": 0.4674,
+          "p_value_binomial": 0.7671,
+          "correct_dir_centered": 54,
+          "accuracy_dir_centered": 0.587,
+          "p_value_centered": 0.0587,
+          "threshold_centered": 0.04104,
+          "accuracy_3class": 0.2935,
+          "pearson_signal_vs_return": 0.1632,
+          "spearman_signal_vs_return": 0.17,
+          "mae_pred_return_pct": 2.0274,
+          "share_pred_up": 0.978,
+          "share_pred_up_centered": 0.207,
+          "share_fact_up": 0.467,
+          "strategy_return_pct": -7.6,
+          "strategy_centered_return_pct": 66.12,
+          "hold_return_pct": -4.93,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 26,
+              "accuracy_dir": 0.5909,
+              "correct_dir_centered": 24,
+              "spearman_signal_vs_return": 0.1753
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 10,
+              "accuracy_dir": 0.3226,
+              "correct_dir_centered": 20,
+              "spearman_signal_vs_return": 0.3637
+            },
+            "2026-11": {
+              "days": 17,
+              "news": 17037,
+              "correct_dir": 7,
+              "accuracy_dir": 0.4118,
+              "correct_dir_centered": 10,
+              "spearman_signal_vs_return": -0.0147
+            }
+          }
+        },
+        "gold": {
+          "days": 92,
+          "correct_dir": 39,
+          "accuracy_dir": 0.4239,
+          "p_value_binomial": 0.9413,
+          "correct_dir_centered": 45,
+          "accuracy_dir_centered": 0.4891,
+          "p_value_centered": 0.6227,
+          "threshold_centered": 0.02239,
+          "accuracy_3class": 0.3913,
+          "pearson_signal_vs_return": -0.041,
+          "spearman_signal_vs_return": -0.0291,
+          "mae_pred_return_pct": 0.7609,
+          "share_pred_up": 0.989,
+          "share_pred_up_centered": 0.38,
+          "share_fact_up": 0.413,
+          "strategy_return_pct": -14.15,
+          "strategy_centered_return_pct": -4.6,
+          "hold_return_pct": -14.28,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 17,
+              "accuracy_dir": 0.3864,
+              "correct_dir_centered": 21,
+              "spearman_signal_vs_return": -0.0286
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 13,
+              "accuracy_dir": 0.4194,
+              "correct_dir_centered": 19,
+              "spearman_signal_vs_return": 0.1484
+            },
+            "2026-11": {
+              "days": 17,
+              "news": 17037,
+              "correct_dir": 9,
+              "accuracy_dir": 0.5294,
+              "correct_dir_centered": 5,
+              "spearman_signal_vs_return": -0.576
+            }
+          }
+        }
+      }
+    },
+    "next": {
+      "news_level": {
+        "btc": {
+          "n": 22865,
+          "accuracy": 0.396,
+          "macro_f1": 0.3005,
+          "log_loss": 1.0985,
+          "fact_share": [
+            0.395,
+            0.47,
+            0.135
+          ],
+          "pred_share": [
+            0.112,
+            0.685,
+            0.203
+          ],
+          "confusion": [
+            [
+              999,
+              6149,
+              1873
+            ],
+            [
+              1226,
+              7404,
+              2118
+            ],
+            [
+              334,
+              2111,
+              651
+            ]
+          ]
+        },
+        "eth": {
+          "n": 22865,
+          "accuracy": 0.3023,
+          "macro_f1": 0.3011,
+          "log_loss": 1.1344,
+          "fact_share": [
+            0.405,
+            0.406,
+            0.189
+          ],
+          "pred_share": [
+            0.3,
+            0.218,
+            0.481
+          ],
+          "confusion": [
+            [
+              2807,
+              2015,
+              4434
+            ],
+            [
+              2798,
+              2013,
+              4480
+            ],
+            [
+              1262,
+              963,
+              2093
+            ]
+          ]
+        },
+        "gold": {
+          "n": 22865,
+          "accuracy": 0.229,
+          "macro_f1": 0.1597,
+          "log_loss": 1.168,
+          "fact_share": [
+            0.482,
+            0.222,
+            0.295
+          ],
+          "pred_share": [
+            0.028,
+            0.924,
+            0.048
+          ],
+          "confusion": [
+            [
+              283,
+              10207,
+              541
+            ],
+            [
+              163,
+              4658,
+              260
+            ],
+            [
+              189,
+              6269,
+              295
+            ]
+          ]
+        }
+      },
+      "day_level": {
+        "btc": {
+          "days": 91,
+          "correct_dir": 41,
+          "accuracy_dir": 0.4505,
+          "p_value_binomial": 0.8528,
+          "correct_dir_centered": 49,
+          "accuracy_dir_centered": 0.5385,
+          "p_value_centered": 0.2648,
+          "threshold_centered": 0.03165,
+          "accuracy_3class": 0.4505,
+          "pearson_signal_vs_return": -0.0132,
+          "spearman_signal_vs_return": -0.0505,
+          "mae_pred_return_pct": 1.5523,
+          "share_pred_up": 0.978,
+          "share_pred_up_centered": 0.363,
+          "share_fact_up": 0.451,
+          "strategy_return_pct": -0.4,
+          "strategy_centered_return_pct": 48.28,
+          "hold_return_pct": 0.58,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 23,
+              "accuracy_dir": 0.5227,
+              "correct_dir_centered": 21,
+              "spearman_signal_vs_return": -0.0946
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 12,
+              "accuracy_dir": 0.3871,
+              "correct_dir_centered": 16,
+              "spearman_signal_vs_return": -0.0621
+            },
+            "2026-11": {
+              "days": 16,
+              "news": 15606,
+              "correct_dir": 6,
+              "accuracy_dir": 0.375,
+              "correct_dir_centered": 12,
+              "spearman_signal_vs_return": 0.2529
+            }
+          }
+        },
+        "eth": {
+          "days": 91,
+          "correct_dir": 40,
+          "accuracy_dir": 0.4396,
+          "p_value_binomial": 0.8959,
+          "correct_dir_centered": 52,
+          "accuracy_dir_centered": 0.5714,
+          "p_value_centered": 0.1041,
+          "threshold_centered": 0.04104,
+          "accuracy_3class": 0.2857,
+          "pearson_signal_vs_return": -0.0607,
+          "spearman_signal_vs_return": -0.1045,
+          "mae_pred_return_pct": 2.0562,
+          "share_pred_up": 0.978,
+          "share_pred_up_centered": 0.209,
+          "share_fact_up": 0.462,
+          "strategy_return_pct": -11.61,
+          "strategy_centered_return_pct": 4.45,
+          "hold_return_pct": -5.85,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 24,
+              "accuracy_dir": 0.5455,
+              "correct_dir_centered": 22,
+              "spearman_signal_vs_return": -0.1645
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 10,
+              "accuracy_dir": 0.3226,
+              "correct_dir_centered": 20,
+              "spearman_signal_vs_return": -0.002
+            },
+            "2026-11": {
+              "days": 16,
+              "news": 15606,
+              "correct_dir": 6,
+              "accuracy_dir": 0.375,
+              "correct_dir_centered": 10,
+              "spearman_signal_vs_return": 0.1382
+            }
+          }
+        },
+        "gold": {
+          "days": 91,
+          "correct_dir": 37,
+          "accuracy_dir": 0.4066,
+          "p_value_binomial": 0.9707,
+          "correct_dir_centered": 38,
+          "accuracy_dir_centered": 0.4176,
+          "p_value_centered": 0.9535,
+          "threshold_centered": 0.02239,
+          "accuracy_3class": 0.3956,
+          "pearson_signal_vs_return": -0.2471,
+          "spearman_signal_vs_return": -0.2882,
+          "mae_pred_return_pct": 0.7607,
+          "share_pred_up": 0.989,
+          "share_pred_up_centered": 0.385,
+          "share_fact_up": 0.418,
+          "strategy_return_pct": -14.02,
+          "strategy_centered_return_pct": -12.27,
+          "hold_return_pct": -13.39,
+          "by_month": {
+            "2026-08..09": {
+              "days": 44,
+              "news": 2327,
+              "correct_dir": 18,
+              "accuracy_dir": 0.4091,
+              "correct_dir_centered": 18,
+              "spearman_signal_vs_return": -0.2685
+            },
+            "2026-10": {
+              "days": 31,
+              "news": 4932,
+              "correct_dir": 11,
+              "accuracy_dir": 0.3548,
+              "correct_dir_centered": 15,
+              "spearman_signal_vs_return": -0.3552
+            },
+            "2026-11": {
+              "days": 16,
+              "news": 15606,
+              "correct_dir": 8,
+              "accuracy_dir": 0.5,
+              "correct_dir_centered": 5,
+              "spearman_signal_vs_return": -0.5147
+            }
+          }
+        }
+      }
+    }
+  }
+}
