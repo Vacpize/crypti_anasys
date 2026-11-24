@@ -47,6 +47,7 @@
 | `subjects` | 1–3 теми через `\|` (фіксований список з 28 кодів, див. `annotate_news.py`) |
 | `sentiment`, `sentiment_score` | загальний характер події: positive/negative/neutral і −1..1 |
 | `crypto_impact`, `gold_impact`, `economy_impact` | очікуваний вплив на ринок, −1..1 |
+| `inertia_btc`, `inertia_eth`, `inertia_gold` | інерція курсу за 24 год **до** новини (з `crypto_price_bd.csv`, скрипт `add_inertia.py`): +1 — рівне зростання, 0 — боковик, −1 — рівне падіння. Майбутнє не використовує, тож можна давати моделі як ознаку. Для золота до ~2020 порожньо (там лише денні ціни) |
 
 **Колонки цін:** `time_utc`, `btc_usd`, `eth_usd`, `usdt_usd`, `gold_usd_oz`, `delta_*` (зміна за 30 хв).
 
