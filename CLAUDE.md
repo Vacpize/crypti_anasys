@@ -13,7 +13,7 @@
 - `crypto_price_bd.csv` — ціни BTC/ETH/USDT/золота з кроком 30 хв (роздільник `;`).
 - `annotate_news.py` — розмітка новин через Claude API (потрібен ключ у `.env`, для файнтюну не потрібен).
 - `analyze_news_prices.py` — зіставлення новин з цінами і кореляції.
-- `add_inertia.py` — додає в `*_annotated.csv` колонки `inertia_btc/eth/gold` (чи тримає курс напрям за 24 год до новини). Після `annotate_news.py collect` запускати знову.
+- `add_price_features.py` — додає в `*_annotated.csv` стан ринку перед новиною: `inertia_*` (чи тримає курс напрям за 24 год) і `volatility_*`, `volatility_*_7d` (наскільки сильно рухається курс, % за день). Після `annotate_news.py collect` запускати знову.
 - `finetune_openai.py` — спроба файнтюну через OpenAI (не вдалася: платформу згортають); локальному файнтюну не потрібен.
 - `db_news.py`, `cryp_rate_db.py`, `desc.py` — оригінальні скрипти збору даних.
 

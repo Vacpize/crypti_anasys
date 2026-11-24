@@ -3,7 +3,7 @@
 Joins annotated news with BTC / ETH / gold prices and shows how prices moved after the news.
 
 For every headline: price at publication time and 1h / 4h / 24h later -> return in %.
-With inertia columns (add_inertia.py): does the trend continue, and does news confirming / opposing it matter.
+With inertia columns (add_price_features.py): does the trend continue, and does news confirming / opposing it matter.
 Then average return and average absolute move grouped by sentiment, subject, globality, clickbait.
 
 Install: python3 -m pip install --user --break-system-packages pandas
@@ -19,7 +19,8 @@ import pandas as pd
 ASSETS = {"btc": "btc_usd", "eth": "eth_usd", "gold": "gold_usd_oz"}
 HORIZONS = {"1h": "1h", "4h": "4h", "24h": "24h"}
 IMPACT_COLS = ["crypto_impact", "gold_impact", "economy_impact"]
-INERTIA_COLS = {a: f"inertia_{a}" for a in ASSETS}           # from add_inertia.py
+INERTIA_COLS = {a: f"inertia_{a}" for a in ASSETS}           # from add_price_features.py
+VOL_COLS = [f"volatility_{a}{w}" for a in ASSETS for w in ("", "_7d")]   # from add_price_features.py
 NEWS_FOR = {"btc": "crypto_impact", "eth": "crypto_impact", "gold": "gold_impact"}
 INERTIA_BINS = [-1.01, -0.3, -0.1, 0.1, 0.3, 1.0]
 INERTIA_LABELS = ["fall strong <=-0.3", "fall -0.3..-0.1", "flat -0.1..0.1", "rise 0.1..0.3", "rise strong >0.3"]
@@ -134,17 +135,21 @@ def daily_table(news, prices):
     for a, c in INERTIA_COLS.items():
         if c in n:   # trend of the last 24h before the day's news (same value for most headlines of a day)
             d[c] = g[c].mean()
+    for c in VOL_COLS:
+        if c in n:
+            d[c] = g[c].mean()
     px = prices.set_index("time").resample("1D").first()
     for a, col in ASSETS.items():
         r = (px[col].shift(-1) / px[col] - 1) * 100
-        d[f"{a}_prev"], d[f"{a}_same"], d[f"{a}_next"], d[f"{a}_|same|"] = r.shift(1), r, r.shift(-1), r.abs()
+        d[f"{a}_prev"], d[f"{a}_same"], d[f"{a}_next"] = r.shift(1), r, r.shift(-1)
+        d[f"{a}_|same|"], d[f"{a}_|next|"] = r.abs(), r.shift(-1).abs()
     d = d[d["n"] >= 5]
 
     def rank_corr(x, y):
         m = x.notna() & y.notna()
         return round(x[m].rank().corr(y[m].rank()), 3)
 
-    targets = [f"{a}_{t}" for a in ASSETS for t in ("prev", "same", "next", "|same|")]
+    targets = [f"{a}_{t}" for a in ASSETS for t in ("prev", "same", "next", "|same|", "|next|")]
     feats = [c for c in d.columns if c != "n" and c not in targets]
     out = pd.DataFrame({t: {f: rank_corr(d[f], d[t]) for f in feats} for t in targets})
     return out, len(d)
@@ -215,7 +220,7 @@ def main():
 
     if any(c in news for c in INERTIA_COLS.values()):
         print(f"\n== inertia: does the price keep its direction over the next {h}? ==")
-        print("   one row per publication time; inertia = direction of the last 24h (add_inertia.py)")
+        print("   one row per publication time; inertia = direction of the last 24h (add_price_features.py)")
         for a, t, corr, n in inertia_tables(news, h):
             print(f"-- {a}: rank corr(inertia, next {h} return) = {corr}  (n={n:,}, noise +-{2 / n ** 0.5:.3f})")
             print(t)
