@@ -3,6 +3,7 @@
 Joins annotated news with BTC / ETH / gold prices and shows how prices moved after the news.
 
 For every headline: price at publication time and 1h / 4h / 24h later -> return in %.
+With inertia columns (add_inertia.py): does the trend continue, and does news confirming / opposing it matter.
 Then average return and average absolute move grouped by sentiment, subject, globality, clickbait.
 
 Install: python3 -m pip install --user --break-system-packages pandas
@@ -18,6 +19,10 @@ import pandas as pd
 ASSETS = {"btc": "btc_usd", "eth": "eth_usd", "gold": "gold_usd_oz"}
 HORIZONS = {"1h": "1h", "4h": "4h", "24h": "24h"}
 IMPACT_COLS = ["crypto_impact", "gold_impact", "economy_impact"]
+INERTIA_COLS = {a: f"inertia_{a}" for a in ASSETS}           # from add_inertia.py
+NEWS_FOR = {"btc": "crypto_impact", "eth": "crypto_impact", "gold": "gold_impact"}
+INERTIA_BINS = [-1.01, -0.3, -0.1, 0.1, 0.3, 1.0]
+INERTIA_LABELS = ["fall strong <=-0.3", "fall -0.3..-0.1", "flat -0.1..0.1", "rise 0.1..0.3", "rise strong >0.3"]
 
 
 def load_news(paths):
@@ -58,6 +63,49 @@ def table(df, key, h, min_n=200):
     return out[out["n"] >= min_n].sort_values("n", ascending=False)
 
 
+def inertia_tables(news, h):
+    """Does the price keep its direction after the news? Uses one row per publication time,
+    because all headlines with the same timestamp share the same inertia and the same return."""
+    out = []
+    u = news.drop_duplicates("time")
+    for a, c in INERTIA_COLS.items():
+        if c not in u:
+            continue
+        x = u.dropna(subset=[c, f"ret_{a}_{h}"]).copy()
+        r = x[f"ret_{a}_{h}"]
+        x["bin"] = pd.cut(x[c], INERTIA_BINS, labels=INERTIA_LABELS)
+        x["kept"] = (r * x[c] > 0)          # moved further in the same direction
+        g = x.groupby("bin", observed=True)
+        t = pd.DataFrame({"n": g.size(), f"{a}_mean%": g[f"ret_{a}_{h}"].mean().round(3),
+                          "kept_direction": g["kept"].mean().round(3)})
+        corr = round(x[c].rank().corr(r.rank()), 3)
+        out.append((a, t, corr, len(x)))
+    return out
+
+
+def news_vs_trend(a_df, h, min_abs=0.1):
+    """Headline impact relative to the current trend: confirms it, goes against it, or no clear signal."""
+    out = []
+    for a, c in INERTIA_COLS.items():
+        imp = NEWS_FOR[a]
+        if c not in a_df or imp not in a_df:
+            continue
+        x = a_df.dropna(subset=[c, imp, f"ret_{a}_{h}"]).copy()
+        strong = (x[imp].abs() >= min_abs) & (x[c].abs() >= min_abs)
+        same = x[imp] * x[c] > 0
+        x["case"] = "no clear news/trend"
+        x.loc[strong & same, "case"] = "news confirms trend"
+        x.loc[strong & ~same, "case"] = "news against trend"
+        x["follows_news"] = (x[f"ret_{a}_{h}"] * x[imp] > 0).where(strong)   # undefined without a news signal
+        x["kept"] = x[f"ret_{a}_{h}"] * x[c] > 0
+        g = x.groupby("case")
+        t = pd.DataFrame({"n": g.size(), f"{a}_mean%": g[f"ret_{a}_{h}"].mean().round(3),
+                          "price_follows_news": g["follows_news"].mean().round(3),
+                          "trend_kept": g["kept"].mean().round(3)})
+        out.append((a, imp, t))
+    return out
+
+
 def daily_table(news, prices):
     """Day-level view: news features of day D vs price change the day before, the same day, the next day.
 
@@ -83,6 +131,9 @@ def daily_table(news, prices):
     for c in IMPACT_COLS:
         if c in n:   # sum, not mean: a day with many strong signals should weigh more
             d[f"{c}_sum"] = g[c].sum()
+    for a, c in INERTIA_COLS.items():
+        if c in n:   # trend of the last 24h before the day's news (same value for most headlines of a day)
+            d[c] = g[c].mean()
     px = prices.set_index("time").resample("1D").first()
     for a, col in ASSETS.items():
         r = (px[col].shift(-1) / px[col] - 1) * 100
@@ -152,9 +203,22 @@ def main():
                                        labels=["<=-0.3", "-0.3..-0.1", "-0.1..0", "0", "0..0.1", "0.1..0.3", ">0.3"])
                 print(f"\n== by {c} ==")
                 print(table(a, f"{c}_bin", h, min_n=30).sort_index())
+        if all(c in a for c in INERTIA_COLS.values()):
+            print(f"\n== news vs trend (|impact| and |inertia| >= 0.1), horizon {h} ==")
+            print("   price_follows_news / trend_kept = share of cases where the price then moved that way")
+            for asset, imp, t in news_vs_trend(a, h):
+                print(f"-- {asset} ({imp} vs inertia_{asset}) --")
+                print(t)
         actors = a["actors"].fillna("").str.split("|").explode()
         print("\n== top 25 actors ==")
         print(actors[actors != ""].value_counts().head(25))
+
+    if any(c in news for c in INERTIA_COLS.values()):
+        print(f"\n== inertia: does the price keep its direction over the next {h}? ==")
+        print("   one row per publication time; inertia = direction of the last 24h (add_inertia.py)")
+        for a, t, corr, n in inertia_tables(news, h):
+            print(f"-- {a}: rank corr(inertia, next {h} return) = {corr}  (n={n:,}, noise +-{2 / n ** 0.5:.3f})")
+            print(t)
 
     if not annotated.empty:
         corr, n_days = daily_table(news, prices)
