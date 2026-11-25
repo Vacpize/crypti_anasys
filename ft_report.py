@@ -18,6 +18,7 @@ from ft_common import ASSETS, EXP_DIR, TARGETS, _binom_p, _plt, write_json
 
 SUCCESS = ("one-sided binomial p < 0.05 for the share of days with the right direction (55/92 days for 'same', "
            "54/91 for 'next') and more right days than the best baseline, for variant A and for variant B")
+MODEL_DIRS = ("finbert", "modernbert-large", "qwen3.5-4b-base", "gemma-4-e4b", "qwen3.5-9b-base", "gemma-4-12b")
 
 
 def k_min(n):
@@ -146,9 +147,21 @@ def main():
     df.to_csv(os.path.join(EXP_DIR, "summary.csv"), index=False)
     os.makedirs(os.path.join(EXP_DIR, "plots"), exist_ok=True)
 
+    expected = {f"{model}/{variant}_{target}" for model in MODEL_DIRS for variant in ("A", "B")
+                for target in TARGETS}
+    actual = set(df.loc[df["kind"] == "fine-tune", "run"])
+    missing = sorted(expected - actual)
     summary = {"success_criterion": SUCCESS,
-               "selection": "final model per target and variant = fine-tuned run with the lowest mean val "
-                            "log-loss (test is not used for the choice)", "final": {}}
+               "selection": "model with the lowest mean val log-loss among runs with metrics; test is not used. "
+                            "Selection is provisional when any planned run is missing.",
+               "coverage": {"planned_training_runs": len(expected), "runs_with_metrics": len(actual),
+                            "runs_missing_metrics": [
+                                {"run": run,
+                                 "status": "output directory exists without metrics"
+                                 if os.path.isdir(os.path.join(EXP_DIR, *run.split("/")))
+                                 else "no output directory"}
+                                for run in missing]},
+               "final": {}}
     md = []
     for t in TARGETS:
         if not (df["target"] == t).any():
@@ -177,6 +190,8 @@ def main():
     summary["runs"] = df.to_dict(orient="records")
     write_json(summary, os.path.join(EXP_DIR, "metrics.json"))
     with open(os.path.join(EXP_DIR, "summary.md"), "w", encoding="utf-8") as f:
+        f.write(f"> Fine-tuning coverage: {len(actual)}/{len(expected)} runs have final metrics. "
+                "Selections are provisional while runs are missing.\n\n")
         f.write("\n".join(md))
     print("\n".join(md))
     print(json.dumps(summary["final"], indent=1, ensure_ascii=False))

@@ -1,0 +1,26 @@
+{
+  "model": "nvidia/Qwen3.8-27B-NVFP4",
+  "released": "2026-08-05",
+  "knowledge_cutoff_note": "release date is an upper bound of the knowledge cutoff; it must be before test start 2026-08-18",
+  "method": "zero-shot, logprobs of the first answer token, thinking off",
+  "input_column": "text_a",
+  "system_prompt": "You are a financial analyst. You judge how a news headline moves asset prices.",
+  "question": "How will the price of {name} most likely change over the next 24 hours after this news? down = falls by more than {t}%, flat = stays within {t}%, up = rises by more than {t}%. Answer with one word: down, flat or up.",
+  "asset_names": {
+    "btc": "Bitcoin (BTC)",
+    "eth": "Ethereum (ETH)",
+    "gold": "gold (XAU/USD)"
+  },
+  "thresholds_pct": {
+    "btc": 1.0,
+    "eth": 1.0,
+    "gold": 0.3
+  },
+  "classes": [
+    "down",
+    "flat",
+    "up"
+  ],
+  "gpu_memory_utilization": 0.6,
+  "limit": null
+}

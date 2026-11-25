@@ -1,0 +1,57 @@
+{
+  "model": "Qwen/Qwen3.5-4B-Base",
+  "released": "2026-02-27",
+  "knowledge_cutoff_note": "release date is an upper bound of the knowledge cutoff; it must be before test start 2026-08-18",
+  "method": "lora",
+  "head": "seq_cls",
+  "variant": "B",
+  "input_column": "text_b",
+  "target": "next",
+  "splits": {
+    "train": "< 2026-07-18",
+    "val": "2026-07-18 .. < 2026-08-18",
+    "test": "2026-08-18 .. 2026-11-17",
+    "day": "calendar day in America/Los_Angeles"
+  },
+  "thresholds_pct": {
+    "btc": 1.0,
+    "eth": 1.0,
+    "gold": 0.3
+  },
+  "classes": [
+    "down",
+    "flat",
+    "up"
+  ],
+  "assets": [
+    "btc",
+    "eth",
+    "gold"
+  ],
+  "hyperparameters": {
+    "method": "lora",
+    "lr": 0.0001,
+    "epochs": 2.0,
+    "batch": 32,
+    "max_len": 256,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "weight_decay": 0.01,
+    "warmup": 0.03,
+    "eval_every": 250,
+    "patience": 4,
+    "max_steps": null,
+    "eval_batch": 128,
+    "grad_ckpt": false,
+    "seed": 42,
+    "tag": ""
+  },
+  "rows": {
+    "train": 63061,
+    "val": 780,
+    "test": 24296
+  },
+  "device": "NVIDIA GB10",
+  "torch": "2.11.0+cu130"
+}
