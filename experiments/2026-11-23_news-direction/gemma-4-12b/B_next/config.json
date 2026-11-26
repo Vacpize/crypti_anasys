@@ -1,0 +1,37 @@
+{
+  "model": "google/gemma-4-12B",
+  "method": "lora",
+  "head": "last_token",
+  "variant": "B",
+  "input_column": "text_b",
+  "target": "next",
+  "splits": {
+    "train": "< 2026-07-18",
+    "val": "2026-07-18 .. < 2026-08-18",
+    "test": "2026-08-18 .. 2026-11-17",
+    "day": "calendar day in America/Los_Angeles"
+  },
+  "thresholds_pct": {
+    "btc": 1.0,
+    "eth": 1.0,
+    "gold": 0.3
+  },
+  "assets": [
+    "btc",
+    "eth",
+    "gold"
+  ],
+  "hyperparameters": {
+    "max_len": 256,
+    "eval_batch": 128,
+    "attn_implementation": "eager"
+  },
+  "rows": {
+    "train": 63291,
+    "val": 780,
+    "test": 24296
+  },
+  "device": "NVIDIA GB10",
+  "torch": "2.11.0+cu130",
+  "checkpoint_evaluation_recovered": true
+}

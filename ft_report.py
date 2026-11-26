@@ -190,8 +190,9 @@ def main():
     summary["runs"] = df.to_dict(orient="records")
     write_json(summary, os.path.join(EXP_DIR, "metrics.json"))
     with open(os.path.join(EXP_DIR, "summary.md"), "w", encoding="utf-8") as f:
-        f.write(f"> Fine-tuning coverage: {len(actual)}/{len(expected)} runs have final metrics. "
-                "Selections are provisional while runs are missing.\n\n")
+        f.write(f"> Fine-tuning coverage: {len(actual)}/{len(expected)} runs have final metrics.\n\n")
+        if missing:
+            f.write("Selections are provisional while runs are missing.\n\n")
         f.write("\n".join(md))
     print("\n".join(md))
     print(json.dumps(summary["final"], indent=1, ensure_ascii=False))

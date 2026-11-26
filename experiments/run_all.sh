@@ -8,8 +8,13 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 EXP=experiments/2026-11-23_news-direction
 LOGS=experiments/logs
+QUEUE=${1:-experiments/queue.txt}
 COMMON="--epochs 2 --eval-every 250 --patience 4"
 mkdir -p "$LOGS"
+if [[ ! -f "$QUEUE" ]]; then
+  echo "queue file not found: $QUEUE" >&2
+  exit 1
+fi
 declare -A tried
 
 while true; do
@@ -25,7 +30,7 @@ while true; do
     fi
     [[ -f "$done_file" || -n "${tried[$key]:-}" ]] && continue
     job="$first|$second|$third|${rest:-}"; break
-  done < experiments/queue.txt
+  done < "$QUEUE"
   [[ -z "$job" ]] && break
   IFS='|' read -r first second third rest <<< "$job"
   tried[$key]=1
